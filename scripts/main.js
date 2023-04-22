@@ -1,3 +1,5 @@
+let FACTOR = 1;
+
 function* typewriter(text, element) {
     for (let i = 0; i < text.length + 1; i++) {
         element.innerText = text.slice(0, i);
@@ -19,18 +21,21 @@ function main() {
         const text = writer.innerText;
         writer.innerText = "";
 
-        return { writer: typewriter(text, writer), delay: writer.getAttribute("delay") || 500 };
+        return { element: writer, writer: typewriter(text, writer), delay: writer.getAttribute("delay") || 500 };
     }));
 
     const writersLine = () => {
-        const { value: { writer, delay }, done } = writerPull.next();
+        const { value: data, done } = writerPull.next();
         if (!done) {
+            const { element, writer, delay } = data;
+            element.classList.add("cursor");
             const fn = () => {
                 const { value: speed, done } = writer.next();
                 if (!done) {
-                    setTimeout(fn, speed);
+                    setTimeout(fn, Number(speed) / FACTOR);
                 } else {
-                    setTimeout(writersLine, delay);
+                    element.classList.remove("cursor");
+                    setTimeout(writersLine, Number(delay) / FACTOR);
                 }
             }
             setTimeout(fn, delay);
@@ -39,5 +44,7 @@ function main() {
 
     setTimeout(writersLine, 500);
 }
+
+function reset() { main(); }
 
 window.onload = main;
