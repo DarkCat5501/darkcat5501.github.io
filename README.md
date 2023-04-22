@@ -1,4 +1,3 @@
-# darkcat5501.github.io
-Some pages i've built over the time
+# Welcome to DarkCat5501 profile
 
-#[./site-scologia]{ web site for my college }
+Here are some of the projects i've built over the years as developer
